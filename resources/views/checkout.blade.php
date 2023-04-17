@@ -13,31 +13,31 @@
                 <div class="card-body">
                     <h5 class="card-title">Semangka Local</h5>
                     <p class="card-text">Soal rasa tak pernah bohong asli suwer tekewer kewer.</p>
-                    <form action="/checkout" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Pesan berapa?</label>
-                            <input type="number" name="qty" class="form-control" id="exampleFormControlInput1"
-                                placeholder="jumlah pesanan" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Nama Pemesan</label>
-                            <input type="text" name="nama" class="form-control text-capitalize" id="exampleFormControlInput1"
-                                placeholder="masukan nama" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">No Telp</label>
-                            <input type="number" name="phone" class="form-control" id="exampleFormControlInput1"
-                                placeholder="masukkan no hp" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlTextarea1" class="form-label">Alamat</label>
-                            <textarea class="form-control" name="alamat" id="exampleFormControlTextarea1" rows="3" required></textarea>
-                        </div>
+                        <table>
+                          <tr>
+                            <td>Nama</td>
+                            <td>: {{$order->nama}}</td>
+                          </tr>
+                          <tr>
+                            <td>Phone</td>
+                            <td>: {{$order->phone}}</td>
+                          </tr>
+                          <tr>
+                            <td>Qty</td>
+                            <td>: {{$order->qty}}</td>
+                          </tr>
+                          <tr>
+                            <td>Alamat</td>
+                            <td>: {{$order->alamat}}</td>
+                          </tr>
+                          <tr>
+                            <td>Total</td>
+                            <td>: {{$order->total_price}}</td>
+                          </tr>
+                        </table>
                         <div >
                           <button class="btn btn-primary ">Ayo Beliii</button>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
