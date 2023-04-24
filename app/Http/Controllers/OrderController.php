@@ -20,7 +20,7 @@ class OrderController extends Controller
     // Set your Merchant Server Key
     \Midtrans\Config::$serverKey = config('midtrans.server_key');
     // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-    \Midtrans\Config::$isProduction = false;
+    \Midtrans\Config::$isProduction = config('midtrans.is_production');
     // Set sanitization on (default)
     \Midtrans\Config::$isSanitized = true;
     // Set 3DS transaction for credit card to true
@@ -32,8 +32,8 @@ class OrderController extends Controller
         'gross_amount' => $order->total_price,
       ),
       'customer_details' => array(
-        'nama' => $request->nama,
-        // 'last_name' => 'pratama',
+        'first_name' => $request->nama,
+        'last_name' => '',
         // 'email' => 'budi.pra@example.com',
         'phone' => $request->phone,
       ),
@@ -41,5 +41,21 @@ class OrderController extends Controller
     $snapToken = \Midtrans\Snap::getSnapToken($params);
     // dd($snapToken);
     return view('checkout', compact('snapToken','order'));
+  }
+
+  public function callback(Request $request){
+    $serverKey = config('midtrans.server_key');
+    $hashed = hash('sha512', $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+    if($hashed == $request->signature_key){
+      if($request->transaction_status == 'capture' or $request->transaction_status == 'settlement'){
+        $order = Order::find($request->order_id);
+        $order->update(['status' => 'Paid']);
+      }
+    }
+  }
+
+  public function invoice($id){
+    $order = Order::find($id);
+    return view('invoice',compact('order'));
   }
 }

@@ -3,6 +3,36 @@
 
 @section('content')
 
+    @push('script')
+        <script type="text/javascript">
+            // For example trigger on button clicked, or any time you need
+            var payButton = document.getElementById('pay-button');
+            payButton.addEventListener('click', function() {
+                // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
+                window.snap.pay('{{$snapToken}}', {
+                    onSuccess: function(result) {
+                        /* You may add your own implementation here */
+                        window.location.href = '/invoice/{{$order->id}}'
+                        console.log(result);
+                    },
+                    onPending: function(result) {
+                        /* You may add your own implementation here */
+                        alert("wating your payment!");
+                        console.log(result);
+                    },
+                    onError: function(result) {
+                        /* You may add your own implementation here */
+                        alert("payment failed!");
+                        console.log(result);
+                    },
+                    onClose: function() {
+                        /* You may add your own implementation here */
+                        alert('you closed the popup without finishing the payment');
+                    }
+                })
+            });
+        </script>
+    @endpush
     <div class="container">
         <div class="row mt-5">
             <h1 class="mb-3">Ini Toko</h1>
@@ -13,31 +43,32 @@
                 <div class="card-body">
                     <h5 class="card-title">Semangka Local</h5>
                     <p class="card-text">Soal rasa tak pernah bohong asli suwer tekewer kewer.</p>
-                        <table>
-                          <tr>
+                    <table>
+                        <tr>
                             <td>Nama</td>
-                            <td>: {{$order->nama}}</td>
-                          </tr>
-                          <tr>
+                            <td>: {{ $order->nama }}</td>
+                        </tr>
+                        <tr>
                             <td>Phone</td>
-                            <td>: {{$order->phone}}</td>
-                          </tr>
-                          <tr>
+                            <td>: {{ $order->phone }}</td>
+                        </tr>
+                        <tr>
                             <td>Qty</td>
-                            <td>: {{$order->qty}}</td>
-                          </tr>
-                          <tr>
+                            <td>: {{ $order->qty }}</td>
+                        </tr>
+                        <tr>
                             <td>Alamat</td>
-                            <td>: {{$order->alamat}}</td>
-                          </tr>
-                          <tr>
+                            <td>: {{ $order->alamat }}</td>
+                        </tr>
+                        <tr>
                             <td>Total</td>
-                            <td>: {{$order->total_price}}</td>
-                          </tr>
-                        </table>
-                        <div >
-                          <button class="btn btn-primary ">Ayo Beliii</button>
-                        </div>
+                            <td>: Rp. {{number_format($order->total_price)}}</td>
+                        </tr>
+                    </table>
+                    <div>
+                        <button id="pay-button" class="btn btn-primary ">Bayar Sekarang</button>
+                    </div>
+
                 </div>
             </div>
         </div>
